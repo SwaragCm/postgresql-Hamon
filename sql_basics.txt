@@ -1,0 +1,247 @@
+1) Create a table employee, with the following fields and constraints added to each field
+id (primary key)
+name (not null)
+department (like marketing, sales, development, testing, devops etc) (not null)
+branch (use any city name)  (a null field)
+salary ( a five-digit value) ( a not null field with default value 0)
+
+ ANS)create table employee(id serial primary key, name varchar(25) not null, department varchar(30) not null, branch varchar(30) null, salary numeric(5, 0) not null default 0);
+
+
+2)Insert at least 10 records into the employee table with relevant data.
+ANS)
+training=# SELECT *FROM employee;
+ id |   name    | department  |  branch  | salary 
+----+-----------+-------------+----------+--------
+  1 | Bruce     | Testing     | Houstan  |  35000
+  2 | Lionel    | Development | Rosario  |  80000
+  3 | Lampard   | Development | Tokyo    |  60000
+  4 | Prithvi   | Marketing   | Being    |  75000
+  5 | Janvi     | Devops      | Chicago  |  22000
+  6 | Cristiano | Sales       | Madrid   |  40000
+  7 | Emma      | Development | Denver   |  30000
+  8 | Rock      | Testing     | Dallas   |  20000
+  9 | Teena     | Devops      | New York |  50000
+ 10 | Cena      | Sales       | Dallas   |  75000
+(10 rows)
+
+
+3) Add the field email, and phone_number with null constraint. (Phone Number can be a string)
+ANS)
+training=# ALTER TABLE employee ADD COLUMN email varchar(30) NULL unique;
+ALTER TABLE
+training=# ALTER TABLE employee ADD COLUMN phone_number varchar(20) null;
+ALTER TABLE
+
+ id |   name    | department  |  branch  | salary | email | phone_number 
+----+-----------+-------------+----------+--------+-------+--------------
+  1 | Bruce     | Testing     | Houstan  |  35000 |       | 
+  2 | Lionel    | Development | Rosario  |  80000 |       | 
+  3 | Lampard   | Development | Tokyo    |  60000 |       | 
+  4 | Prithvi   | Marketing   | Being    |  75000 |       | 
+  5 | Janvi     | Devops      | Chicago  |  22000 |       | 
+  6 | Cristiano | Sales       | Madrid   |  40000 |       | 
+  7 | Emma      | Development | Denver   |  30000 |       | 
+  8 | Rock      | Testing     | Dallas   |  20000 |       | 
+  9 | Teena     | Devops      | New York |  50000 |       | 
+ 10 | Cena      | Sales       | Dallas   |  75000 |       | 
+(10 rows)
+
+4) Modify the field salary to remove default constraints added to it.
+ANS)
+training=# AlTER TABLE employee ALTER COLUMN salary DROP default;
+ALTER TABLE
+training=# \d employee
+                                      Table "public.employee"
+    Column    |         Type          | Collation | Nullable |               Default                
+--------------+-----------------------+-----------+----------+--------------------------------------
+ id           | integer               |           | not null | nextval('employee_id_seq'::regclass)
+ name         | character varying(25) |           | not null | 
+ department   | character varying(30) |           | not null | 
+ branch       | character varying(30) |           |          | 
+ salary       | numeric(5,0)          |           | not null | 
+ email        | character varying(30) |           |          | 
+ phone_number | character varying(20) |           |          | 
+ 
+ 
+ 5) Update the fields phone_number and email for the employee having a salary between 10100 and 50045 and their department should be either marketing or testing
+ ANS)
+ training=# UPDATE employee SET phone_number='9910001880', email='sample@gmail.com' WHERE salary BETWEEN 10100 AND 50045 AND department IN('Marketing', 'Testing');
+UPDATE 3
+
+
+6) Update email for the rest of the employees.
+ANS)
+ id |   name    | department  |  branch  | salary |        email         | phone_number 
+----+-----------+-------------+----------+--------+----------------------+--------------
+  1 | Bruce     | Testing     | Houstan  |  35000 | sample@gmail.com     | 9910001880
+  2 | Lionel    | Development | Rosario  |  80000 | m10@gmail.com        | 
+  3 | Lampard   | Development | Tokyo    |  60000 | lamp@gmail.com       | 
+  4 | Prithvi   | Marketing   | Being    |  75000 | prithvi123@gmail.com | 
+  5 | Janvi     | Devops      | Chicago  |  22000 | janu@gmail.com       | 
+  6 | Cristiano | Sales       | Madrid   |  40000 | cr7@gmail.com        | 
+  7 | Emma      | Marketing   | Denver   |  30000 | sample@gmail.com     | 9910001880
+  8 | Rock      | Testing     | Dallas   |  20000 | sample@gmail.com     | 9910001880
+  9 | Teena     | Devops      | New York |  50000 | teena@gmail.com      | 
+ 10 | Cena      | Sales       | Dallas   |  75000 | cena@gmail.com       | 
+(10 rows)
+
+
+
+7) Modify the field email to add a UNIQUE constraint to it.
+ANS)
+ALTER TABLE employee ADD CONSTRAINT unique_constraint unique(email);
+ALTER TABLE
+
+
+8)Select all the employees
+ANS)
+training=# SELECT name as employees FROM employee;
+ employees 
+-----------
+ Janvi
+ Cristiano
+ Teena
+ Lionel
+ Lampard
+ Prithvi
+ Cena
+ Bruce
+ Emma
+ Rock
+(10 rows)
+
+training=# SELECT * FROM employee;
+ id |   name    | department  |  branch  | salary |        email         | phone_number 
+----+-----------+-------------+----------+--------+----------------------+--------------
+  5 | Janvi     | Devops      | Chicago  |  22000 | janu@gmail.com       | 
+  6 | Cristiano | Sales       | Madrid   |  40000 | cr7@gmail.com        | 
+  9 | Teena     | Devops      | New York |  50000 | teena@gmail.com      | 
+  2 | Lionel    | Development | Rosario  |  80000 | m10@gmail.com        | 
+  3 | Lampard   | Development | Tokyo    |  60000 | lamp@gmail.com       | 
+  4 | Prithvi   | Marketing   | Being    |  75000 | prithvi123@gmail.com | 
+ 10 | Cena      | Sales       | Dallas   |  75000 | cena@gmail.com       | 
+  1 | Bruce     | Testing     | Houstan  |  35000 | bruce@gmail.com      | 8989657489
+  7 | Emma      | Marketing   | Denver   |  30000 | emma@gmail.com       | 9987644567
+  8 | Rock      | Testing     | Dallas   |  20000 | rock@gmail.com       | 7658459876
+(10 rows)
+
+
+
+9)Select id, name, email from employees having a salary greater than or equal to 45000, the department should contain the string ‘maRKeT’, and the branch can be ‘Being’, ‘Tokyo’ or ‘New York’.
+Select only the first 5 records in the descending order of salary. (You can add new records into the employee table if necessary)
+ANS)
+training=# select id, name, email from employee where salary>=45000 and department ilike '%maRKet%' and branch in ('Tokyo', 'Being', 'New York') order by salary desc limit 5;
+ id |  name   |        email         
+----+---------+----------------------
+  4 | Prithvi | prithvi123@gmail.com
+ 12 | Natasha | nat@gmail.com
+ 11 | John    | john667@gmail.com
+ 13 | Arjun   | arju@gmail.com
+ 14 | Anwar   | anwar@gmail.com
+(5 rows)
+
+
+10)Select all the employees having phone_number null;
+ANS)
+training=# SELECT name, phone_number FROM employee where phone_number is null;
+   name    | phone_number 
+-----------+--------------
+ Janvi     | 
+ Cristiano | 
+ Teena     | 
+ Lionel    | 
+ Lampard   | 
+ Prithvi   | 
+ Cena      | 
+ John      | 
+ Natasha   | 
+ Arjun     | 
+ Anwar     | 
+(11 rows)
+
+
+11)Find the no. of employees in each department with a count greater than 3. Display in the ascending order of the department.
+ANS)
+training=# SELECT department, COUNT(*) as number_employees
+FROM employee
+GROUP BY department
+HAVING COUNT(*) > 3
+ORDER BY department ASC;
+ department | number_employees 
+------------+------------------
+ Marketing  |                6
+(1 row)
+
+
+12)Find the maximum, minimum, and average salary in each department.
+ANS)
+training=# select department, max(salary) as Max_salary, min(salary) as Min_salary, avg(salary) as Avg_salary from employee group by department;
+ department  | max_salary | min_salary |     avg_salary     
+-------------+------------+------------+--------------------
+ Testing     |      35000 |      20000 | 27500.000000000000
+ Sales       |      75000 |      40000 | 57500.000000000000
+ Development |      80000 |      60000 | 70000.000000000000
+ Devops      |      50000 |      22000 | 36000.000000000000
+ Marketing   |      75000 |      30000 | 55000.000000000000
+(5 rows)
+
+
+
+13)Find distinct emails from the employee table.
+ANS)
+training=# SELECT DISTINCT email
+FROM employee;
+        email         
+----------------------
+ nat@gmail.com
+ lamp@gmail.com
+ m10@gmail.com
+ emma@gmail.com
+ anwar@gmail.com
+ bruce@gmail.com
+ john667@gmail.com
+ cr7@gmail.com
+ cena@gmail.com
+ rock@gmail.com
+ teena@gmail.com
+ janu@gmail.com
+ arju@gmail.com
+ prithvi123@gmail.com
+(14 rows)
+
+
+14)Find the no. of employees in each department whose name starts with the letter ‘L’.
+ANS)
+training=# SELECT department, COUNT(*) AS num_employees
+FROM employee
+WHERE name ILIKE 'l%'
+GROUP BY department;
+ department  | num_employees 
+-------------+---------------
+ Development |             2
+(1 row)
+
+
+15)Find the no. of employees, no. of employees with phone_number in each city.
+ANS)
+  branch  | num_employees | num_employees_with_phone 
+----------+---------------+--------------------------
+ Dallas   |             2 |                        1
+ Madrid   |             1 |                        0
+ Being    |             2 |                        0
+ Chicago  |             1 |                        0
+ Rosario  |             1 |                        0
+ New York |             2 |                        0
+ Houstan  |             1 |                        1
+ Tokyo    |             3 |                        0
+ Denver   |             1 |                        1
+(9 rows)
+
+
+16)Delete the employee records with no phone_number and should belong to the city ‘Tokyo’.    
+ANS)
+training=# DELETE FROM employee       
+WHERE branch = 'Tokyo' AND phone_number IS NULL;
+DELETE 3
+
